@@ -5211,7 +5211,6 @@ body.mode-bharat .faq-float,body.mode-gulf .faq-float,body.mode-europe .faq-floa
   <div style="display:flex;align-items:center;gap:8px;">
     <button id="ibFreeDemoBtn" onclick="ibShowPricing()" style="background:transparent;border:1px solid #2A2A2A;color:#888;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;"><span style="width:7px;height:7px;border-radius:50%;background:#00C896;display:inline-block;"></span> Free Demo</button>
     <button onclick="ibShowPricing()" style="background:#00C896;border:none;color:#000;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">Upgrade ₹999/mo</button>
-    <button id="ibAIBadge" onclick="ibShowKeySetup()" style="background:transparent;border:1px solid #333;color:#F5C518;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;">⚙️ Connect AI</button>
     <button id="ibLogoutBtn" onclick="doLogout()" style="display:none;background:transparent;border:1px solid #2A2A2A;color:#888;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;">Logout</button>
   </div>
 </div>
@@ -5223,10 +5222,15 @@ body.mode-bharat .faq-float,body.mode-gulf .faq-float,body.mode-europe .faq-floa
     <div><h3 style="font-size:14px;font-weight:600;color:#FFF;margin:0 0 4px;">Unlock All Interview Rounds</h3><p style="font-size:12px;color:#888;margin:0;">Free demo: HR Round only. Upgrade ₹999/mo for all 4 rounds — Bharat &amp; GCC.</p></div>
     <button onclick="ibShowPricing()" style="background:#00C896;color:#000;border:none;padding:10px 22px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;">Upgrade — ₹999/mo</button>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;">
     <div style="background:#111;border:1px solid #1C1C1C;border-radius:12px;padding:20px;"><div style="font-size:18px;margin-bottom:8px;">📈</div><div style="font-size:28px;font-weight:700;color:#FFF;margin-bottom:3px;" id="ibBestScore">—</div><div style="font-size:11px;color:#555;">Best Score</div></div>
     <div style="background:#111;border:1px solid #1C1C1C;border-radius:12px;padding:20px;"><div style="font-size:18px;margin-bottom:8px;">📊</div><div style="font-size:28px;font-weight:700;color:#FFF;margin-bottom:3px;" id="ibSessions">0</div><div style="font-size:11px;color:#555;">Sessions</div></div>
     <div style="background:#111;border:1px solid #1C1C1C;border-radius:12px;padding:20px;"><div style="font-size:11px;font-weight:600;color:#888;margin-bottom:8px;">👤 Account</div><div style="font-size:13px;color:#CCC;margin-bottom:2px;" id="ibAccName">Guest User</div><div style="font-size:11px;color:#555;margin-bottom:6px;" id="ibAccSub">Start a round to begin</div><span style="background:#1A1A1A;border:1px solid #2A2A2A;color:#888;font-size:10px;padding:2px 8px;border-radius:4px;" id="ibPlanBadge">Free Demo</span></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;">
+    <button onclick="ibClearHistory()" style="background:transparent;border:1px solid #2A2A2A;color:#666;padding:7px 14px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;">🗑️ Clear History</button>
+    <button onclick="ibForgotPassword()" style="background:transparent;border:1px solid #2A2A2A;color:#666;padding:7px 14px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;">🔑 Reset Password</button>
+    <button onclick="ibShowKeySetup()" style="background:transparent;border:1px solid #2A4A3A;color:#00C896;padding:7px 14px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;" id="ibAIBadge2">⚙️ Connect AI</button>
   </div>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div style="font-size:15px;font-weight:600;color:#FFF;">Choose Your Target Market</div><div style="font-size:11px;color:#555;">100% track-specific questions</div></div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
@@ -5289,6 +5293,7 @@ body.mode-bharat .faq-float,body.mode-gulf .faq-float,body.mode-europe .faq-floa
     <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">Top Achievement</label><input type="text" id="ibAchievement" placeholder="e.g. Managed INR 300 Cr reconciliation" style="background:#111;border:1px solid #222;border-radius:8px;padding:10px 14px;color:#FFF;font-size:13px;font-family:inherit;outline:none;"></div>
     <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;" id="ibTgtSalLabel">Target Salary (INR/month)</label><input type="text" id="ibSal" placeholder="e.g. ₹1,20,000" style="background:#111;border:1px solid #222;border-radius:8px;padding:10px 14px;color:#FFF;font-size:13px;font-family:inherit;outline:none;"></div>
   </div>
+  <div style="margin-bottom:16px;"><div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:10px;color:#00C896;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">📋 Paste Job Description (Optional but Recommended)</label><textarea id="ibJD" rows="5" placeholder="Paste 10-20 lines from the job description here. AI will generate questions specific to this role and company..." style="background:#111;border:1px solid #2A4A3A;border-radius:8px;padding:10px 14px;color:#FFF;font-size:12px;font-family:inherit;outline:none;resize:vertical;line-height:1.6;"></textarea><div style="font-size:10px;color:#444;margin-top:3px;">More context = more accurate questions + better scoring</div></div></div>
   <button onclick="ibLaunch()" style="width:100%;background:#00C896;color:#000;border:none;padding:14px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">✦ Start Interview →</button>
 </div>
 </div>
@@ -5311,6 +5316,7 @@ body.mode-bharat .faq-float,body.mode-gulf .faq-float,body.mode-europe .faq-floa
     <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
       <button id="ibSubmit" onclick="ibAnalyse()" style="display:none;background:#00C896;color:#000;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">✦ Submit Answer</button>
       <button onclick="ibSkip()" style="background:#111;border:1px solid #1C1C1C;color:#666;padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">Skip →</button>
+      <button onclick="ibResetRound()" style="background:#111;border:1px solid #2A1A1A;color:#EF4444;padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">↺ Reset</button>
     </div>
   </div>
   <div id="ibAnalysisWrap" style="display:none;"></div>
@@ -5338,8 +5344,9 @@ body.mode-bharat .faq-float,body.mode-gulf .faq-float,body.mode-europe .faq-floa
     <div style="text-align:center;font-size:10px;color:#444;line-height:1.7;">Trusted by professionals across 18 countries · emineus.online</div>
   </div>
   <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-    <button onclick="ibStartSetup(ibCurrentRound)" style="flex:1;padding:12px;border-radius:8px;border:1px solid #00C896;color:#00C896;background:#111;font-size:13px;cursor:pointer;font-family:inherit;">Practice Again</button>
-    <button onclick="ibShow('ibDashboard')" style="flex:1;padding:12px;border-radius:8px;border:1px solid #222;color:#666;background:#111;font-size:13px;cursor:pointer;font-family:inherit;">Back to Dashboard</button>
+    <button onclick="ibStartSetup(ibCurrentRound)" style="flex:1;padding:12px;border-radius:8px;border:1px solid #00C896;color:#00C896;background:#111;font-size:13px;cursor:pointer;font-family:inherit;">🔄 Practice Again</button>
+    <button onclick="ibDownloadPDF()" style="flex:1;padding:12px;border-radius:8px;border:1px solid #F5C518;color:#F5C518;background:#111;font-size:13px;cursor:pointer;font-family:inherit;">📥 Download Report</button>
+    <button onclick="ibShow('ibDashboard')" style="flex:1;padding:12px;border-radius:8px;border:1px solid #222;color:#666;background:#111;font-size:13px;cursor:pointer;font-family:inherit;">← Dashboard</button>
   </div>
 </div>
 </div>
@@ -5488,51 +5495,6 @@ function showAuthErr(msg){
   if(el){ el.textContent = msg; el.style.display = 'block'; }
 }
 
-// ── GROQ KEY MANAGEMENT ────────────────────────────────
-function ibShowKeySetup(){
-  var modal = document.getElementById('ibKeyModal');
-  if(!modal){
-    modal = document.createElement('div');
-    modal.id = 'ibKeyModal';
-    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:20000;display:flex;align-items:center;justify-content:center;padding:20px;';
-    modal.innerHTML = '<div style="background:#111;border:1px solid #2A2A2A;border-radius:16px;padding:28px;max-width:440px;width:100%;">'
-      + '<div style="font-size:16px;font-weight:700;color:#FFF;margin-bottom:6px;">🔑 Connect AI Scoring</div>'
-      + '<div style="font-size:12px;color:#666;margin-bottom:18px;line-height:1.6;">Enter your free Groq API key to activate live AI answer scoring. Get yours at <a href="https://console.groq.com" target="_blank" style="color:#00C896;">console.groq.com</a> → API Keys → Create Key</div>'
-      + '<input id="ibKeyInput" type="password" placeholder="gsk_xxxxxxxxxxxxxxxxxx" autocomplete="off" style="width:100%;box-sizing:border-box;background:#0A0A0A;border:1px solid #2A2A2A;border-radius:8px;padding:11px 14px;color:#FFF;font-size:13px;font-family:monospace;margin-bottom:12px;outline:none;" />'
-      + '<div style="display:flex;gap:8px;">'
-      + '<button onclick="ibSaveKey()" style="flex:1;background:#00C896;color:#000;border:none;padding:11px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Activate AI Scoring</button>'
-      + '<button onclick="document.getElementById(\'ibKeyModal\').style.display=\'none\'" style="background:transparent;border:1px solid #2A2A2A;color:#666;padding:11px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>'
-      + '</div>'
-      + '<div id="ibKeyErr" style="display:none;margin-top:8px;font-size:11px;color:#EF4444;"></div>'
-      + '<div style="margin-top:14px;font-size:10px;color:#444;line-height:1.6;">Key stored only in your browser. Free tier: 14,400 req/day. Cost: ₹0.</div>'
-      + '</div>';
-    document.body.appendChild(modal);
-  } else {
-    modal.style.display = 'flex';
-  }
-}
-
-function ibSaveKey(){
-  var key = (document.getElementById('ibKeyInput') || {}).value || '';
-  key = key.trim();
-  if(!key || !key.startsWith('gsk_')){ var e = document.getElementById('ibKeyErr'); if(e){ e.textContent = 'Invalid key — must start with gsk_'; e.style.display = 'block'; } return; }
-  localStorage.setItem('ib_groq_key', key);
-  document.getElementById('ibKeyModal').style.display = 'none';
-  ibUpdateKeyBadge();
-  alert('✅ AI Scoring activated! Now submit your answer.');
-}
-
-function ibClearKey(){
-  localStorage.removeItem('ib_groq_key');
-  ibUpdateKeyBadge();
-}
-
-function ibUpdateKeyBadge(){
-  var badge = document.getElementById('ibAIBadge');
-  var has = !!localStorage.getItem('ib_groq_key');
-  if(badge){ badge.textContent = has ? '✅ AI Active' : '⚙️ Connect AI'; badge.style.color = has ? '#00C896' : '#F5C518'; badge.style.borderColor = has ? '#00C896' : '#333'; }
-}
-
 function openInterviewPage(){
   var ip = document.getElementById('interview-page');
   if(ip){
@@ -5640,6 +5602,7 @@ function ibLaunch(){
     industry: document.getElementById('ibIndustry').value,
     achievement: document.getElementById('ibAchievement').value.trim(),
     salary: document.getElementById('ibSal').value.trim(),
+    jd: (document.getElementById('ibJD') ? document.getElementById('ibJD').value.trim() : ''),
     track: ibTrack
   };
   ibScores = [];
@@ -5787,18 +5750,49 @@ function ibSkip(){
   if(ibQIndex >= ibQuestions.length){ ibShowReport(); } else { ibLoadQ(); }
 }
 
+// ── GROQ KEY MANAGEMENT ────────────────────────────────
+function ibShowKeySetup(){
+  var modal = document.getElementById('ibKeyModal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'ibKeyModal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:20000;display:flex;align-items:center;justify-content:center;padding:20px;';
+    modal.innerHTML = '<div style="background:#111;border:1px solid #2A2A2A;border-radius:16px;padding:28px;max-width:420px;width:100%;"><div style="font-size:16px;font-weight:700;color:#FFF;margin-bottom:6px;">&#128273; Connect AI Scoring</div><div style="font-size:12px;color:#555;margin-bottom:18px;line-height:1.7;">Get your free key at <a href=\'https://console.groq.com\' target=\'_blank\' style=\'color:#00C896;\'>console.groq.com</a> &#8594; API Keys &#8594; Create Key</div><input id=\'ibKeyInput\' type=\'password\' placeholder=\'gsk_xxxxxxxxxxxxxxxxxx\' autocomplete=\'off\' style=\'width:100%;box-sizing:border-box;background:#0A0A0A;border:1px solid #2A2A2A;border-radius:8px;padding:11px 14px;color:#FFF;font-size:13px;font-family:monospace;margin-bottom:12px;outline:none;\' /><div style=\'display:flex;gap:8px;\'><button onclick=\'ibSaveKey()\' style=\'flex:1;background:#00C896;color:#000;border:none;padding:11px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;\'>Activate AI</button><button onclick=\'document.getElementById(\'ibKeyModal\').style.display=\'none\'\' style=\'background:transparent;border:1px solid #2A2A2A;color:#555;padding:11px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;\'>Cancel</button></div><div id=\'ibKeyErr\' style=\'display:none;margin-top:8px;font-size:11px;color:#EF4444;\'></div><div style=\'margin-top:12px;font-size:10px;color:#333;\'>Key stored only in your browser &#183; Free &#183; 14,400 req/day</div></div>';
+    document.body.appendChild(modal);
+  } else { modal.style.display = 'flex'; }
+}
+
+function ibSaveKey(){
+  var key = (document.getElementById('ibKeyInput')||{}).value || '';
+  key = key.trim();
+  if(!key || !key.startsWith('gsk_')){ var e=document.getElementById('ibKeyErr'); if(e){e.textContent='Invalid key — must start with gsk_';e.style.display='block';} return; }
+  localStorage.setItem('ib_groq_key', key);
+  document.getElementById('ibKeyModal').style.display = 'none';
+  ibUpdateKeyBadge();
+  alert('AI Scoring activated!');
+}
+
+function ibUpdateKeyBadge(){
+  var has = !!localStorage.getItem('ib_groq_key');
+  ['ibAIBadge','ibAIBadge2'].forEach(function(id){
+    var b = document.getElementById(id);
+    if(b){ b.textContent = has ? '✅ AI Active' : '⚙️ Connect AI'; b.style.color = has ? '#00C896' : '#F5C518'; }
+  });
+}
+
 async function ibAnalyse(){
   var ans = document.getElementById('ibAnswer') ? document.getElementById('ibAnswer').value.trim() : '';
   if(!ans){ alert('Please type your answer before submitting.'); return; }
-  var GROQ_KEY = localStorage.getItem('ib_groq_key') || '';
-  if(!GROQ_KEY){ ibShowKeySetup(); return; }
   var sb = document.getElementById('ibSubmit');
   if(sb){ sb.textContent = '⏳ AI Scoring...'; sb.disabled = true; }
   var q = ibQuestions[ibQIndex];
   var aw = document.getElementById('ibAnalysisWrap');
   if(aw){ aw.style.display = 'block'; aw.innerHTML = '<div style="background:#111;border:1px solid #1C1C1C;border-radius:12px;padding:20px;text-align:center;color:#888;font-size:13px;">✦ AI is analysing your answer...</div>'; }
   try {
-    var prompt = 'You are an expert interview coach for ' + (ibTrack==='uae'?'UAE/GCC':'Indian') + ' job market. Analyse this interview answer:\n\nQuestion: ' + q.q + '\n\nCandidate Answer: ' + ans + '\n\nCandidate Profile: ' + (ibProfile.job||'Professional') + ' with ' + (ibProfile.exp||'5+ years') + ' in ' + (ibProfile.industry||'Operations') + '\n\nProvide ONLY a JSON response in this exact format (no other text):\n{"confidence":7,"grammar":8,"clarity":6,"professionalism":8,"star":5,"technical":7,"feedback":"2-3 sentence specific feedback","correction":"Key corrections needed","rewrite":"Improved version of their answer in 3-4 sentences"}\n\nScore each parameter from 1-10. Be honest and specific.';
+    var jdContext = ibProfile.jd ? '\n\nJob Description Context:\n' + ibProfile.jd.substring(0,600) : '';
+    var prompt = 'You are an expert interview coach for ' + (ibTrack==='uae'?'UAE/GCC':'Indian') + ' job market. Analyse this interview answer:\n\nQuestion: ' + q.q + '\n\nCandidate Answer: ' + ans + '\n\nCandidate Profile: ' + (ibProfile.job||'Professional') + ' with ' + (ibProfile.exp||'5+ years') + ' in ' + (ibProfile.industry||'Operations') + (ibProfile.achievement ? '. Key achievement: ' + ibProfile.achievement : '') + jdContext + '\n\nProvide ONLY a JSON response in this exact format (no other text):\n{"confidence":7,"grammar":8,"clarity":6,"professionalism":8,"star":5,"technical":7,"feedback":"2-3 sentence specific feedback","correction":"Key corrections needed","rewrite":"Improved version of their answer in 3-4 sentences"}\n\nScore each parameter from 1-10. Be honest and specific.';
+    var GROQ_KEY = localStorage.getItem('ib_groq_key') || '';
+    if(!GROQ_KEY){ if(sb){sb.textContent='✦ Submit Answer';sb.disabled=false;} ibShowKeySetup(); return; }
     var resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
@@ -5828,9 +5822,55 @@ function ibNextQ(){
   if(ibQIndex >= ibQuestions.length){ ibShowReport(); } else { ibLoadQ(); }
 }
 
+// ── RESET ROUND ────────────────────────────────────────
+function ibResetRound(){
+  if(!confirm('Reset this round? All answers and scores will be cleared.')) return;
+  ibScores = [];
+  ibQIndex = 0;
+  ibLoadQ();
+}
+
+// ── CLEAR HISTORY ──────────────────────────────────────
+function ibClearHistory(){
+  if(!confirm('Clear all session history? This cannot be undone.')) return;
+  ibHistory = [];
+  localStorage.removeItem('ib_history');
+  ibUpdateHistory();
+}
+
+// ── PASSWORD RESET ─────────────────────────────────────
+function ibForgotPassword(){
+  var email = prompt('Enter your registered email address:');
+  if(!email) return;
+  email = email.trim().toLowerCase();
+  var users = JSON.parse(localStorage.getItem('ib_users') || '{}');
+  if(!users[email]){ alert('No account found with this email.'); return; }
+  var newPass = prompt('Enter your new password (min 6 characters):');
+  if(!newPass || newPass.length < 6){ alert('Password must be at least 6 characters.'); return; }
+  users[email].pass = btoa(newPass);
+  localStorage.setItem('ib_users', JSON.stringify(users));
+  alert('✅ Password updated. Please login with your new password.');
+}
+
+// ── CANDIDATE COUNTER ──────────────────────────────────
+function ibTrackSession(){
+  try {
+    var count = parseInt(localStorage.getItem('ib_total_sessions') || '0') + 1;
+    localStorage.setItem('ib_total_sessions', count);
+    // Also track in a shared way via URL ping (simple analytics)
+    var el = document.getElementById('ibSessionCount');
+    if(el) el.textContent = count;
+  } catch(e){}
+}
+
+function ibGetTotalSessions(){
+  return parseInt(localStorage.getItem('ib_total_sessions') || '0');
+}
+
 // ── REPORT ─────────────────────────────────────────────
 function ibShowReport(){
   if(ibScores.length === 0){ ibShow('ibDashboard'); return; }
+  ibTrackSession();
   var total = ibScores.reduce(function(s,r){ return s + r.total; }, 0);
   var avg = Math.round(total / ibScores.length / 60 * 100);
   var col = avg >= 80 ? '#00C896' : avg >= 60 ? '#F5C518' : '#EF4444';
