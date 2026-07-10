@@ -5452,13 +5452,25 @@ function doGuest(){
 }
 
 function doLogin(){
-  var email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  var emailRaw = document.getElementById('loginEmail').value.trim();
+  var emailLower = emailRaw.toLowerCase();
   var pass = document.getElementById('loginPass').value;
-  if(!email || !pass){ showAuthErr('Please enter your email and password.'); return; }
+  if(!emailRaw || !pass){ showAuthErr('Please enter your email and password.'); return; }
   var users = JSON.parse(localStorage.getItem('ib_users') || '{}');
-  var user = users[email];
-  if(!user){ showAuthErr('Account not found. Please create an account.'); return; }
+  // Try lowercase first, then original casing (for old accounts)
+  var user = users[emailLower] || users[emailRaw];
+  var foundKey = users[emailLower] ? emailLower : (users[emailRaw] ? emailRaw : null);
+  if(!user || !foundKey){ showAuthErr('Account not found. Please create an account.'); return; }
   if(btoa(pass) !== user.pass){ showAuthErr('Incorrect password.'); return; }
+  // Auto-migrate old account to lowercase key
+  if(foundKey !== emailLower){
+    users[emailLower] = users[foundKey];
+    users[emailLower].email = emailLower;
+    delete users[foundKey];
+    localStorage.setItem('ib_users', JSON.stringify(users));
+    user = users[emailLower];
+  }
+  var email = emailLower;
   ibCurrentUser = user;
   localStorage.setItem('ib_current', JSON.stringify(user));
   document.getElementById('authScreen').style.display = 'none';
@@ -6115,22 +6127,4 @@ function ibForgotPassword(){
   users[key].pass = btoa(newPass);
   // Also save with lowercase key for future consistency
   if(key !== emailLower){
-    users[emailLower] = users[key];
-    users[emailLower].email = emailLower;
-    delete users[key];
-  }
-  localStorage.setItem('ib_users', JSON.stringify(users));
-  alert('✅ Password updated successfully!\n\nLogin with:\nEmail: ' + emailLower + '\nNew password: ' + newPass);
-}
-
-// ── SESSION TRACKING ─────────────────────────────────────────────────
-function ibTrackSession(){
-  try {
-    var n = parseInt(localStorage.getItem('ib_total_sessions') || '0') + 1;
-    localStorage.setItem('ib_total_sessions', n);
-  } catch(e){}
-}
-
-</script>
-</body>
-</html>
+    users[emailLower] 
