@@ -6028,33 +6028,29 @@ function ibDownloadPDF(){
 }
 
 // ── GROQ KEY MANAGEMENT ─────────────────────────────────────────────
+function ibCloseKeyModal(){
+  var m = document.getElementById('ibKeyModal');
+  if(m) m.style.display = 'none';
+}
+
 function ibShowKeySetup(){
   var existing = document.getElementById('ibKeyModal');
   if(existing){ existing.style.display = 'flex'; return; }
   var modal = document.createElement('div');
   modal.id = 'ibKeyModal';
-  modal.style.position = 'fixed';
-  modal.style.top = '0';
-  modal.style.left = '0';
-  modal.style.right = '0';
-  modal.style.bottom = '0';
-  modal.style.background = 'rgba(0,0,0,0.88)';
-  modal.style.zIndex = '20000';
-  modal.style.display = 'flex';
-  modal.style.alignItems = 'center';
-  modal.style.justifyContent = 'center';
-  modal.style.padding = '20px';
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:20000;display:flex;align-items:center;justify-content:center;padding:20px;';
   var box = document.createElement('div');
   box.style.cssText = 'background:#111;border:1px solid #2A2A2A;border-radius:16px;padding:28px;max-width:420px;width:100%;';
-  box.innerHTML = '<div style="font-size:16px;font-weight:700;color:#FFF;margin-bottom:6px;">&#128273; Connect AI Scoring</div>'
-    + '<div style="font-size:12px;color:#555;margin-bottom:16px;line-height:1.7;">Get free key at <strong style="color:#00C896;">console.groq.com</strong> &rarr; API Keys &rarr; Create Key. Key stored only in your browser.</div>'
+  var hasKey = !!localStorage.getItem('ib_groq_key');
+  box.innerHTML = '<div style="font-size:16px;font-weight:700;color:#FFF;margin-bottom:6px;">&#x1F511; Connect AI Scoring</div>'
+    + '<div style="font-size:12px;color:#555;margin-bottom:16px;line-height:1.7;">Get free key at <strong style="color:#00C896;">console.groq.com</strong> &#x2192; API Keys &#x2192; Create Key. Stored only in your browser.</div>'
     + '<input id="ibKeyInput" type="password" placeholder="gsk_xxxxxxxxxxxxxxxxxx" autocomplete="off" style="width:100%;box-sizing:border-box;background:#0A0A0A;border:1px solid #2A2A2A;border-radius:8px;padding:11px 14px;color:#FFF;font-size:13px;font-family:monospace;margin-bottom:12px;outline:none;" />'
     + '<div style="display:flex;gap:8px;margin-bottom:8px;">'
     + '<button onclick="ibSaveKey()" style="flex:1;background:#00C896;color:#000;border:none;padding:11px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">Activate AI</button>'
-    + '<button onclick="document.getElementById('ibKeyModal').style.display='none'" style="background:transparent;border:1px solid #2A2A2A;color:#555;padding:11px 16px;border-radius:8px;font-size:13px;cursor:pointer;">Cancel</button>'
+    + '<button onclick="ibCloseKeyModal()" style="background:transparent;border:1px solid #2A2A2A;color:#555;padding:11px 16px;border-radius:8px;font-size:13px;cursor:pointer;">Cancel</button>'
     + '</div>'
     + '<div id="ibKeyErr" style="display:none;font-size:11px;color:#EF4444;margin-bottom:6px;"></div>'
-    + (localStorage.getItem('ib_groq_key') ? '<button onclick="ibClearAIKey()" style="width:100%;background:transparent;border:1px solid #2A1A1A;color:#EF4444;padding:8px;border-radius:6px;font-size:11px;cursor:pointer;margin-top:4px;">Remove saved key</button>' : '');
+    + (hasKey ? '<button onclick="ibClearAIKey()" style="width:100%;background:transparent;border:1px solid #2A1A1A;color:#EF4444;padding:8px;border-radius:6px;font-size:11px;cursor:pointer;margin-top:4px;">Remove saved key</button>' : '');
   modal.appendChild(box);
   document.body.appendChild(modal);
 }
@@ -6127,4 +6123,22 @@ function ibForgotPassword(){
   users[key].pass = btoa(newPass);
   // Also save with lowercase key for future consistency
   if(key !== emailLower){
-    users[emailLower] 
+    users[emailLower] = users[key];
+    users[emailLower].email = emailLower;
+    delete users[key];
+  }
+  localStorage.setItem('ib_users', JSON.stringify(users));
+  alert('✅ Password updated successfully!\n\nLogin with:\nEmail: ' + emailLower + '\nNew password: ' + newPass);
+}
+
+// ── SESSION TRACKING ─────────────────────────────────────────────────
+function ibTrackSession(){
+  try {
+    var n = parseInt(localStorage.getItem('ib_total_sessions') || '0') + 1;
+    localStorage.setItem('ib_total_sessions', n);
+  } catch(e){}
+}
+
+</script>
+</body>
+</html>
