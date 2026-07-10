@@ -6019,49 +6019,69 @@ function ibDownloadPDF(){
   doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(80,80,80);
   var dl=doc.splitTextToSize(pkg.desc,178); doc.text(dl,16,y); y+=dl.length*5+6;
   // ── Q&A + AI IMPROVED ANSWERS ─────────────────────────────────────
-  y += 4;
+  // Always start Q&A on a fresh page
+  doc.addPage();
+  var qy = 14;
+  doc.setFillColor(0,200,150); doc.rect(0,0,210,12,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(0,0,0);
+  doc.text('EMINEUS — Questions & AI Suggested Answers',14,8);
+  qy = 20;
   if(ibQuestions && ibQuestions.length > 0){
-    doc.setFillColor(0,200,150); doc.rect(14,y,182,8,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(0,0,0);
-    doc.text('Questions & AI-Suggested Answers',16,y+5.5); y+=12;
     ibQuestions.forEach(function(q, i){
       var sc = ibScores[i] || {};
-      // Check if new page needed
-      if(y > 250){ doc.addPage(); y=20; }
-      // Question
-      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(0,180,120);
-      doc.text('Q'+(i+1)+': ',16,y);
-      doc.setFont('helvetica','normal'); doc.setTextColor(30,30,30);
-      var qLines = doc.splitTextToSize(q.q||'', 170);
-      doc.text(qLines, 24, y);
-      y += qLines.length * 5 + 3;
-      // Score badge
+      var rewriteText = sc.rewrite || '';
+      // Strip any HTML tags from rewrite
+      rewriteText = rewriteText.replace(/<[^>]*>/g,'').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').trim();
+      // New page if needed
+      if(qy > 245){ doc.addPage(); qy=14; }
+      // Question number bar
+      doc.setFillColor(20,20,20); doc.rect(14,qy,182,7,'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(0,200,150);
+      doc.text('Q'+(i+1),16,qy+5);
+      // Score
       var pct = Math.round((sc.total||0)/60*100);
-      doc.setFontSize(8);
-      doc.setTextColor(pct>=80?[0,150,100]:pct>=60?[200,160,0]:[200,50,50]);
-      // Score is tricky with arrays in setTextColor, use individual
-      if(pct>=80){ doc.setTextColor(0,150,100); }
-      else if(pct>=60){ doc.setTextColor(200,160,0); }
-      else { doc.setTextColor(200,50,50); }
-      doc.text('Score: '+pct+'%',16,y); y+=5;
-      // AI Improved Answer (rewrite)
-      if(sc.rewrite && sc.rewrite !== ''){
-        if(y > 255){ doc.addPage(); y=20; }
-        doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(0,150,100);
-        doc.text('AI Suggested Answer:',16,y); y+=5;
-        doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(60,60,60);
-        var rLines = doc.splitTextToSize(sc.rewrite, 175);
-        if(y + rLines.length*4.5 > 270){ doc.addPage(); y=20; }
-        doc.text(rLines, 16, y);
-        y += rLines.length * 4.5 + 3;
+      var scoreCol = pct>=80 ? [0,180,100] : pct>=60 ? [200,160,0] : [220,60,60];
+      doc.setTextColor(scoreCol[0], scoreCol[1], scoreCol[2]);
+      doc.text('Score: '+pct+'%', 170, qy+5);
+      qy += 10;
+      // Question text
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(220,220,220);
+      var qLines = doc.splitTextToSize(q.q||'(Question)', 175);
+      if(qy + qLines.length*5 > 270){ doc.addPage(); qy=14; }
+      doc.text(qLines, 16, qy);
+      qy += qLines.length * 5 + 4;
+      // AI Suggested Answer label
+      if(rewriteText){
+        if(qy > 255){ doc.addPage(); qy=14; }
+        doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(0,180,100);
+        doc.text('AI Suggested Answer:', 16, qy); qy += 5;
+        doc.setFont('helvetica','normal'); doc.setTextColor(80,80,80);
+        var rLines = doc.splitTextToSize(rewriteText, 175);
+        // Paginate long answers
+        var linesPerPage = Math.floor((270-qy)/4.5);
+        if(rLines.length <= linesPerPage){
+          doc.text(rLines, 16, qy);
+          qy += rLines.length * 4.5 + 5;
+        } else {
+          var chunk = rLines.slice(0, linesPerPage);
+          doc.text(chunk, 16, qy);
+          doc.addPage(); qy = 14;
+          var rest = rLines.slice(linesPerPage);
+          doc.text(rest, 16, qy);
+          qy += rest.length * 4.5 + 5;
+        }
+      } else {
+        doc.setFontSize(8); doc.setFont('helvetica','italic'); doc.setTextColor(120,120,120);
+        doc.text('(Question was skipped or AI answer unavailable)', 16, qy);
+        qy += 8;
       }
-      // Separator
-      doc.setDrawColor(40,40,40); doc.line(14, y, 196, y); y += 5;
+      // Divider
+      doc.setDrawColor(40,40,40); doc.line(14, qy, 196, qy); qy += 6;
     });
-    y += 4;
+  } else {
+    doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(120,120,120);
+    doc.text('No questions available. Please complete an interview first.', 14, qy+20);
   }
-  // Package section
-  if(y > 255){ doc.addPage(); y=20; }
   doc.setFontSize(9); doc.setTextColor(0,150,100);
   doc.text('To book: WhatsApp +91 9560003751  |  emineus.online',16,y);
   doc.setFillColor(30,30,30); doc.rect(0,280,210,17,'F');
