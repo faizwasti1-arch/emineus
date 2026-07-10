@@ -5850,13 +5850,21 @@ function ibShowReport(){
 
 function ibUpdateHistory(){
   var el = document.getElementById('ibRecentSessions');
-  if(!el) return;
   var h = JSON.parse(localStorage.getItem('ib_history') || '[]');
   ibHistory = h;
-  if(!h.length){ el.innerHTML = '<div style="background:#111;border:1px solid #1C1C1C;border-radius:12px;padding:20px;text-align:center;color:#444;font-size:12px;">No sessions yet. Start your first interview above.</div>'; return; }
+  // Always update stats first
+  var bs = document.getElementById('ibBestScore');
+  var ss = document.getElementById('ibSessions');
+  if(!h.length){
+    if(bs) bs.textContent = '—';
+    if(ss) ss.textContent = '0';
+    if(el) el.innerHTML = '<div style="background:#111;border:1px solid #1C1C1C;border-radius:12px;padding:20px;text-align:center;color:#444;font-size:12px;">No sessions yet. Start your first interview above.</div>';
+    return;
+  }
   var best = Math.max.apply(null, h.map(function(s){ return s.score; }));
-  var bs = document.getElementById('ibBestScore'); if(bs) bs.textContent = best + '%';
-  var ss = document.getElementById('ibSessions'); if(ss) ss.textContent = h.length;
+  if(bs) bs.textContent = best + '%';
+  if(ss) ss.textContent = h.length;
+  if(!el) return;
   var rn = {hr:'HR Round',technical:'Technical Round',manager:'Manager Round',final:'Final Round'};
   el.innerHTML = h.slice(0,5).map(function(s){
     var c = s.score >= 80 ? '#00C896' : s.score >= 60 ? '#F5C518' : '#EF4444';
