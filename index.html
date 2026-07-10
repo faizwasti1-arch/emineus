@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5212,6 +5211,7 @@ body.mode-bharat .faq-float,body.mode-gulf .faq-float,body.mode-europe .faq-floa
   <div style="display:flex;align-items:center;gap:8px;">
     <button id="ibFreeDemoBtn" onclick="ibShowPricing()" style="background:transparent;border:1px solid #2A2A2A;color:#888;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;"><span style="width:7px;height:7px;border-radius:50%;background:#00C896;display:inline-block;"></span> Free Demo</button>
     <button onclick="ibShowPricing()" style="background:#00C896;border:none;color:#000;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">Upgrade ₹999/mo</button>
+    <button id="ibAIBadge" onclick="ibShowKeySetup()" style="background:transparent;border:1px solid #333;color:#F5C518;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;">⚙️ Connect AI</button>
     <button id="ibLogoutBtn" onclick="doLogout()" style="display:none;background:transparent;border:1px solid #2A2A2A;color:#888;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;">Logout</button>
   </div>
 </div>
@@ -5488,6 +5488,51 @@ function showAuthErr(msg){
   if(el){ el.textContent = msg; el.style.display = 'block'; }
 }
 
+// ── GROQ KEY MANAGEMENT ────────────────────────────────
+function ibShowKeySetup(){
+  var modal = document.getElementById('ibKeyModal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'ibKeyModal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:20000;display:flex;align-items:center;justify-content:center;padding:20px;';
+    modal.innerHTML = '<div style="background:#111;border:1px solid #2A2A2A;border-radius:16px;padding:28px;max-width:440px;width:100%;">'
+      + '<div style="font-size:16px;font-weight:700;color:#FFF;margin-bottom:6px;">🔑 Connect AI Scoring</div>'
+      + '<div style="font-size:12px;color:#666;margin-bottom:18px;line-height:1.6;">Enter your free Groq API key to activate live AI answer scoring. Get yours at <a href="https://console.groq.com" target="_blank" style="color:#00C896;">console.groq.com</a> → API Keys → Create Key</div>'
+      + '<input id="ibKeyInput" type="password" placeholder="gsk_xxxxxxxxxxxxxxxxxx" autocomplete="off" style="width:100%;box-sizing:border-box;background:#0A0A0A;border:1px solid #2A2A2A;border-radius:8px;padding:11px 14px;color:#FFF;font-size:13px;font-family:monospace;margin-bottom:12px;outline:none;" />'
+      + '<div style="display:flex;gap:8px;">'
+      + '<button onclick="ibSaveKey()" style="flex:1;background:#00C896;color:#000;border:none;padding:11px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Activate AI Scoring</button>'
+      + '<button onclick="document.getElementById(\'ibKeyModal\').style.display=\'none\'" style="background:transparent;border:1px solid #2A2A2A;color:#666;padding:11px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>'
+      + '</div>'
+      + '<div id="ibKeyErr" style="display:none;margin-top:8px;font-size:11px;color:#EF4444;"></div>'
+      + '<div style="margin-top:14px;font-size:10px;color:#444;line-height:1.6;">Key stored only in your browser. Free tier: 14,400 req/day. Cost: ₹0.</div>'
+      + '</div>';
+    document.body.appendChild(modal);
+  } else {
+    modal.style.display = 'flex';
+  }
+}
+
+function ibSaveKey(){
+  var key = (document.getElementById('ibKeyInput') || {}).value || '';
+  key = key.trim();
+  if(!key || !key.startsWith('gsk_')){ var e = document.getElementById('ibKeyErr'); if(e){ e.textContent = 'Invalid key — must start with gsk_'; e.style.display = 'block'; } return; }
+  localStorage.setItem('ib_groq_key', key);
+  document.getElementById('ibKeyModal').style.display = 'none';
+  ibUpdateKeyBadge();
+  alert('✅ AI Scoring activated! Now submit your answer.');
+}
+
+function ibClearKey(){
+  localStorage.removeItem('ib_groq_key');
+  ibUpdateKeyBadge();
+}
+
+function ibUpdateKeyBadge(){
+  var badge = document.getElementById('ibAIBadge');
+  var has = !!localStorage.getItem('ib_groq_key');
+  if(badge){ badge.textContent = has ? '✅ AI Active' : '⚙️ Connect AI'; badge.style.color = has ? '#00C896' : '#F5C518'; badge.style.borderColor = has ? '#00C896' : '#333'; }
+}
+
 function openInterviewPage(){
   var ip = document.getElementById('interview-page');
   if(ip){
@@ -5513,6 +5558,7 @@ function openInterviewPage(){
     if(db) db.innerHTML = '<span style="width:7px;height:7px;border-radius:50%;background:#00C896;display:inline-block;margin-right:4px;"></span>' + ibCurrentUser.name.split(' ')[0];
   }
   ibUpdateHistory();
+  ibUpdateKeyBadge();
   ibShow('ibDashboard');
 }
 
@@ -5744,6 +5790,8 @@ function ibSkip(){
 async function ibAnalyse(){
   var ans = document.getElementById('ibAnswer') ? document.getElementById('ibAnswer').value.trim() : '';
   if(!ans){ alert('Please type your answer before submitting.'); return; }
+  var GROQ_KEY = localStorage.getItem('ib_groq_key') || '';
+  if(!GROQ_KEY){ ibShowKeySetup(); return; }
   var sb = document.getElementById('ibSubmit');
   if(sb){ sb.textContent = '⏳ AI Scoring...'; sb.disabled = true; }
   var q = ibQuestions[ibQIndex];
@@ -5751,13 +5799,13 @@ async function ibAnalyse(){
   if(aw){ aw.style.display = 'block'; aw.innerHTML = '<div style="background:#111;border:1px solid #1C1C1C;border-radius:12px;padding:20px;text-align:center;color:#888;font-size:13px;">✦ AI is analysing your answer...</div>'; }
   try {
     var prompt = 'You are an expert interview coach for ' + (ibTrack==='uae'?'UAE/GCC':'Indian') + ' job market. Analyse this interview answer:\n\nQuestion: ' + q.q + '\n\nCandidate Answer: ' + ans + '\n\nCandidate Profile: ' + (ibProfile.job||'Professional') + ' with ' + (ibProfile.exp||'5+ years') + ' in ' + (ibProfile.industry||'Operations') + '\n\nProvide ONLY a JSON response in this exact format (no other text):\n{"confidence":7,"grammar":8,"clarity":6,"professionalism":8,"star":5,"technical":7,"feedback":"2-3 sentence specific feedback","correction":"Key corrections needed","rewrite":"Improved version of their answer in 3-4 sentences"}\n\nScore each parameter from 1-10. Be honest and specific.';
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    var resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': 'placeholder', 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 800, messages: [{ role: 'user', content: prompt }] })
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 800, messages: [{ role: 'user', content: prompt }] })
     });
     var data = await resp.json();
-    var txt = data.content && data.content[0] ? data.content[0].text : '';
+    var txt = data.choices && data.choices[0] ? data.choices[0].message.content : '';
     var clean = txt.replace(/```json|```/g,'').trim();
     var parsed = JSON.parse(clean);
     var total = parsed.confidence + parsed.grammar + parsed.clarity + parsed.professionalism + parsed.star + parsed.technical;
