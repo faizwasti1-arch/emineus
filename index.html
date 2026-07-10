@@ -5452,7 +5452,7 @@ function doGuest(){
 }
 
 function doLogin(){
-  var email = document.getElementById('loginEmail').value.trim();
+  var email = document.getElementById('loginEmail').value.trim().toLowerCase();
   var pass = document.getElementById('loginPass').value;
   if(!email || !pass){ showAuthErr('Please enter your email and password.'); return; }
   var users = JSON.parse(localStorage.getItem('ib_users') || '{}');
@@ -5467,7 +5467,7 @@ function doLogin(){
 
 function doRegister(){
   var name = document.getElementById('regName').value.trim();
-  var email = document.getElementById('regEmail').value.trim();
+  var email = document.getElementById('regEmail').value.trim().toLowerCase();
   var pass = document.getElementById('regPass').value;
   if(!name || !email || !pass){ showAuthErr('Please fill all required fields.'); return; }
   if(pass.length < 6){ showAuthErr('Password must be at least 6 characters.'); return; }
@@ -6104,14 +6104,23 @@ function ibClearHistory(){
 function ibForgotPassword(){
   var email = prompt('Enter your registered email:');
   if(!email) return;
-  email = email.trim().toLowerCase();
+  var emailLower = email.trim().toLowerCase();
+  var emailOrig = email.trim();
   var users = JSON.parse(localStorage.getItem('ib_users') || '{}');
-  if(!users[email]){ alert('No account found with this email.'); return; }
+  // Try lowercase first, then original casing
+  var key = users[emailLower] ? emailLower : (users[emailOrig] ? emailOrig : null);
+  if(!key){ alert('No account found with this email.\n\nTip: Try the exact email you used to register.'); return; }
   var newPass = prompt('Enter your new password (min 6 characters):');
   if(!newPass || newPass.length < 6){ alert('Password must be at least 6 characters.'); return; }
-  users[email].pass = btoa(newPass);
+  users[key].pass = btoa(newPass);
+  // Also save with lowercase key for future consistency
+  if(key !== emailLower){
+    users[emailLower] = users[key];
+    users[emailLower].email = emailLower;
+    delete users[key];
+  }
   localStorage.setItem('ib_users', JSON.stringify(users));
-  alert('✅ Password updated. Please login with your new password.');
+  alert('✅ Password updated successfully!\n\nLogin with:\nEmail: ' + emailLower + '\nNew password: ' + newPass);
 }
 
 // ── SESSION TRACKING ─────────────────────────────────────────────────
