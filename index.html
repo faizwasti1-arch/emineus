@@ -5791,7 +5791,7 @@ function ibLoadQ(){
   var pl = document.getElementById('ibProgLabel'); if(pl) pl.textContent = 'Question ' + (ibQIndex+1) + ' of ' + total;
   var pp = document.getElementById('ibProgPct'); if(pp) pp.textContent = pct + '%';
   var pf = document.getElementById('ibProgFill'); if(pf) pf.style.width = pct + '%';
-  var sa = document.getElementById('ibAnswer'); if(sa) sa.value = '';
+  var sa = document.getElementById('ibAnswer'); if(sa){ sa.value = ''; sa.style.display = 'block'; }
   var ch = document.getElementById('ibChar'); if(ch) ch.textContent = '0 characters';
   var sb = document.getElementById('ibSubmit'); if(sb) sb.style.display = 'none';
   var nb = document.getElementById('ibNext'); if(nb) nb.style.display = 'none';
